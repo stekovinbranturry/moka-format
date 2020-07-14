@@ -1,6 +1,6 @@
 import { window } from 'vscode';
 
-const getPath = (line: string) => line.split("from '")[1].split("'")[0];
+const getPath = (line: string) => (line.match(/\'(.+)\'/) || [])[1];
 
 const sortByReference = (arr: string[], reference: string[]) => {
   arr.sort((a, b) => {
