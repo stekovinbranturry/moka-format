@@ -2,12 +2,20 @@ import { window } from 'vscode';
 
 const arryToStr = (arr: string[]) => (arr.length ? arr.join('\n') + '\n\n' : '');
 
+const removeEmptyLines = (str: string) =>
+  str
+    .split('\n')
+    .filter((line) => line)
+    .join('\n');
+
 const isOthers = (str: string) => /from \'\./g.test(str);
 
 const sortPackages = (arr: string[]) => {};
 
 const sort = (text: string) => {
-  const lines = text.split('\n').filter((line) => line);
+  const lines = removeEmptyLines(text)
+    .split(';\n')
+    .map((line) => (line.endsWith(';') ? line : line + ';'));
   /**
    * 引入的样式
    */
