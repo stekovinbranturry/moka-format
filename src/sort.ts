@@ -19,9 +19,9 @@ const removeEmptyLines = (str: string) =>
     .filter((line) => line)
     .join('\n');
 
-const isPackage = (str: string) => /from \'[a-z](.+)\';/.test(str);
+const isPackage = (str: string) => /from \'([a-z]|@)(.+)\';/.test(str);
 
-const isComponents = (str: string) => /from \'(.+)\/[A-Z](.+)\';/.test(str);
+const isComponent = (str: string) => /from \'(.+)\/[A-Z](.+)\';/.test(str);
 
 const sortPackages = (arr: string[]) => {
   const HEADER = [
@@ -64,10 +64,6 @@ const sortOthers = (arr: string[]) => {
 };
 
 const sort = (text: string) => {
-  const lines = removeEmptyLines(text)
-    .split(';\n')
-    .map((line) => (line.endsWith(';') ? line : line + ';'));
-
   /**
    * 引入的依赖，如react, redux
    */
@@ -85,12 +81,16 @@ const sort = (text: string) => {
    */
   let styles: string[] = [];
 
+  const lines = removeEmptyLines(text)
+    .split(';\n')
+    .map((line) => (line.endsWith(';') ? line : line + ';'));
+
   lines.forEach((line) => {
     if (line.endsWith(".styl';")) {
       styles.push(line);
     } else if (isPackage(line)) {
       packages.push(line);
-    } else if (isComponents(line)) {
+    } else if (isComponent(line)) {
       components.push(line);
     } else {
       utils.push(line);
