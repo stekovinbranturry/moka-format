@@ -19,7 +19,9 @@ const removeEmptyLines = (str: string) =>
     .filter((line) => line)
     .join('\n');
 
-const isOthers = (str: string) => /from \'\./.test(str);
+const isPackage = (str: string) => /from \'[a-z](.+)\';/.test(str);
+
+const isComponents = (str: string) => /from \'(.+)\/[A-Z](.+)\';/.test(str);
 
 const sortPackages = (arr: string[]) => {
   const HEADER = [
@@ -56,34 +58,51 @@ const sortPackages = (arr: string[]) => {
   return [...first, ...second, ...third];
 };
 
+const sortOthers = (arr: string[]) => {
+  const pathList = arr.map((el) => getPath(el)).sort();
+  return sortByReference(arr, pathList);
+};
+
 const sort = (text: string) => {
   const lines = removeEmptyLines(text)
     .split(';\n')
     .map((line) => (line.endsWith(';') ? line : line + ';'));
-  /**
-   * 引入的样式
-   */
-  let styles: string[] = [];
+
   /**
    * 引入的依赖，如react, redux
    */
   let packages: string[] = [];
   /**
-   * 其他
+   * 组件
    */
-  let others: string[] = [];
+  let components: string[] = [];
+  /**
+   * utils, constants...
+   */
+  let utils: string[] = [];
+  /**
+   * 引入的样式
+   */
+  let styles: string[] = [];
 
   lines.forEach((line) => {
     if (line.endsWith(".styl';")) {
       styles.push(line);
-    } else if (isOthers(line)) {
-      others.push(line);
-    } else {
+    } else if (isPackage(line)) {
       packages.push(line);
+    } else if (isComponents(line)) {
+      components.push(line);
+    } else {
+      utils.push(line);
     }
   });
 
-  return arryToStr(sortPackages(packages)) + arryToStr(others) + arryToStr(styles);
+  return (
+    arryToStr(sortPackages(packages)) +
+    arryToStr(sortOthers(components)) +
+    arryToStr(sortOthers(utils)) +
+    arryToStr(styles)
+  );
 };
 
 export function sortCurrentDocument() {
