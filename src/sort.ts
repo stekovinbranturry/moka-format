@@ -26,6 +26,7 @@ const isComponent = (str: string) => /from \'(.+)\/[A-Z](.+)\';/.test(str);
 const sortPackages = (arr: string[]) => {
   const HEADER = [
     'react',
+    'react-dom',
     'redux',
     'react-redux',
     'prop-types',
