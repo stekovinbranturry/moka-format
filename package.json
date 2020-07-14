@@ -2,7 +2,7 @@
   "name": "moka-sort-imports",
   "displayName": "Moka Sort Imports",
   "description": "Sort imports automatically",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "publisher": "ZhangKai",
   "repository": {
     "type": "git",
