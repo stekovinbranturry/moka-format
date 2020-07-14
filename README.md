@@ -1,29 +1,19 @@
-# moka-sort-imports README
+# Moka Sort Imports
 
 自动 sort imports 的 VS Code 插件，Moka 前端团队内部使用
 
-## Features
+## Usage
 
-TODO
+1. Search "Moka Sort Imports" in VS Code marketplace and install it
 
-## Requirements
+2. Select all imports, press Cmd + Shift + P / Win + SHIFT + P, and then use command "Moka Sort Imports"
 
-TODO
-
-## Extension Settings
-
-TODO
-
-## Known Issues
-
-TODO
+![]('./demo.gif')
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
-
 ### 1.0.0
 
-Initial commit
+Seperate imports into three parts: packages, local js, local others
 
 ---
