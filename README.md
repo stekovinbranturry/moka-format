@@ -8,7 +8,7 @@
 
 2. Select all imports, press Cmd + Shift + P / Win + SHIFT + P, and then use command "Moka Sort Imports"
 
-![]('./demo.gif')
+![](https://github.com/stekovinbranturry/moka-sort-imports/blob/master/demo.gif)
 
 ## Release Notes
 
