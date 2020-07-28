@@ -3,9 +3,10 @@ import * as vscode from 'vscode';
 import { sortCurrentDocument } from './sort';
 
 export function activate(context: vscode.ExtensionContext) {
-  let disposable = vscode.commands.registerCommand('moka-sort-imports.sortImports', () => {
-    sortCurrentDocument();
-  });
+  let disposable = vscode.commands.registerCommand(
+    'moka-sort-imports.sortImports',
+    sortCurrentDocument
+  );
 
   context.subscriptions.push(disposable);
 }

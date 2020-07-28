@@ -1,6 +1,15 @@
 import { window } from 'vscode';
 
-const getPath = (line: string) => (line.match(/\'(.+)\'/) || [])[1];
+const REGS = {
+  GET_PATH: /\'(.+)\'/,
+  ABS_PATH: new RegExp(
+    "('apply/)|('apply-mobile/)|('apply-web/)|('chrome-extension/)|('common/)|('dajie-api/)|('deliver_query/)|('foreground/)|('headhunter/)|('hr_mobile/)|('interview_signin/)|('lagou-sms/)|('lingui/)|('main-app/)|('oneclick/)|('reset_password/)|('server/)|('shixiseng-api/)|('sign_in/)|('source_signin/)"
+  ),
+  PACKAGE: /from \'([a-z]|@)(.+)\';/,
+  COMPONENT: /\/[A-Z](.+)\';/,
+};
+
+const getPath = (line: string) => (line.match(REGS.GET_PATH) || [])[1];
 
 const sortByReference = (arr: string[], reference: string[]) => {
   arr.sort((a, b) => {
@@ -19,9 +28,9 @@ const removeEmptyLines = (str: string) =>
     .filter((line) => line)
     .join('\n');
 
-const isPackage = (str: string) => /from \'([a-z]|@)(.+)\';/.test(str);
+const isPackage = (str: string) => REGS.PACKAGE.test(str) && !REGS.ABS_PATH.test(str);
 
-const isComponent = (str: string) => /from \'(.+)\/[A-Z](.+)\';/.test(str);
+const isComponent = (str: string) => REGS.COMPONENT.test(str);
 
 const sortPackages = (arr: string[]) => {
   const HEADER = [
