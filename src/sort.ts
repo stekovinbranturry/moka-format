@@ -20,13 +20,13 @@ const sortByReference = (arr: string[], reference: string[]) => {
   return arr;
 };
 
-const arryToStr = (arr: string[]) => (arr.length ? arr.join('\n') + '\n\n' : '');
+const arryToStr = (arr: string[]) => (arr.length ? arr.join('\r\n') + '\r\n\r\n' : '');
 
 const removeEmptyLines = (str: string) =>
   str
-    .split('\n')
+    .split('\r\n')
     .filter((line) => line)
-    .join('\n');
+    .join('\r\n');
 
 const isPackage = (str: string) => REGS.PACKAGE.test(str) && !REGS.ABS_PATH.test(str);
 
@@ -92,7 +92,7 @@ const sort = (text: string) => {
   let styles: string[] = [];
 
   const lines = removeEmptyLines(text)
-    .split(';\n')
+    .split(';\r\n')
     .map((line) => (line.endsWith(';') ? line : line + ';'));
 
   lines.forEach((line) => {
