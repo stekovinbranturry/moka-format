@@ -115,7 +115,7 @@ const sort = (text: string) => {
   );
 };
 
-export function sortCurrentDocument() {
+export function sortSelectedImports() {
   const editor = window.activeTextEditor;
   if (!editor) {
     return;

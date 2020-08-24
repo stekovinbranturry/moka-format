@@ -1,15 +1,9 @@
 import * as vscode from 'vscode';
 
-import { sortCurrentDocument } from './sort';
+import { sortSelectedImports } from './sort-imports';
+import { sortSelectedCss } from './sort-css';
 
 export function activate(context: vscode.ExtensionContext) {
-  let disposable = vscode.commands.registerCommand(
-    'moka-sort-imports.sortImports',
-    sortCurrentDocument
-  );
-
-  context.subscriptions.push(disposable);
+  vscode.commands.registerCommand('moka-sort-imports.sortImports', sortSelectedImports);
+  vscode.commands.registerCommand('moka-sort-imports.sortCss', sortSelectedCss);
 }
-
-// this method is called when your extension is deactivated
-export function deactivate() {}
