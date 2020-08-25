@@ -1,8 +1,8 @@
 {
   "name": "moka-format",
   "displayName": "Moka format",
-  "description": "Sort imports automatically",
-  "version": "0.1.0",
+  "description": "Moka format",
+  "version": "1.0.0",
   "publisher": "ZhangKai",
   "repository": {
     "type": "git",

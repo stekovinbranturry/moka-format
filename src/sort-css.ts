@@ -1,6 +1,8 @@
 import { window } from 'vscode';
 import { CSS_ORDER } from './constant';
 
+const endLineMarker = require('os').EOL;
+
 const getCssProperty = (text: string) => {
   let property = text.trim().split(' ')[0];
   if (property.endsWith(':')) {
@@ -10,15 +12,15 @@ const getCssProperty = (text: string) => {
 };
 
 const sort = (text: string) => {
-  const lines = text.split('\r\n');
+  const lines = text.split(endLineMarker);
   lines.sort((a, b) => {
     a = getCssProperty(a);
     b = getCssProperty(b);
-    const aIndex = CSS_ORDER.indexOf(a) || 9999;
-    const bIndex = CSS_ORDER.indexOf(b) || 9999;
+  const aIndex = CSS_ORDER.indexOf(a) < 0 ? 9999 : CSS_ORDER.indexOf(a);
+  const bIndex = CSS_ORDER.indexOf(b) < 0 ? 9999 : CSS_ORDER.indexOf(b);
     return aIndex - bIndex;
   });
-  return lines.join('\r\n');
+  return lines.join(endLineMarker);
 };
 
 export function sortSelectedCss() {

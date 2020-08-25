@@ -1,5 +1,7 @@
 import { window } from 'vscode';
 
+const endLineMarker = require('os').EOL;
+
 const REGS = {
   GET_PATH: /\'(.+)\'/,
   ABS_PATH: new RegExp(
@@ -20,13 +22,13 @@ const sortByReference = (arr: string[], reference: string[]) => {
   return arr;
 };
 
-const arryToStr = (arr: string[]) => (arr.length ? arr.join('\r\n') + '\r\n\r\n' : '');
+const arryToStr = (arr: string[]) => (arr.length ? arr.join(endLineMarker) + endLineMarker + endLineMarker : '');
 
 const removeEmptyLines = (str: string) =>
   str
-    .split('\r\n')
+    .split(endLineMarker)
     .filter((line) => line)
-    .join('\r\n');
+    .join(endLineMarker);
 
 const isPackage = (str: string) => REGS.PACKAGE.test(str) && !REGS.ABS_PATH.test(str);
 
@@ -92,7 +94,7 @@ const sort = (text: string) => {
   let styles: string[] = [];
 
   const lines = removeEmptyLines(text)
-    .split(';\r\n')
+    .split(`;${endLineMarker}`)
     .map((line) => (line.endsWith(';') ? line : line + ';'));
 
   lines.forEach((line) => {
