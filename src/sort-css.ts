@@ -5,8 +5,11 @@ const endLineMarker = require('os').EOL;
 
 const getCssProperty = (text: string) => {
   let property = text.trim().split(' ')[0];
+  if (property.startsWith('@')) {
+    return '@';
+  }
   if (property.endsWith(':')) {
-    property = property.substr(0, property.length - 1);
+    return property.substr(0, property.length - 1);
   }
   return property;
 };
@@ -16,8 +19,8 @@ const sort = (text: string) => {
   lines.sort((a, b) => {
     a = getCssProperty(a);
     b = getCssProperty(b);
-  const aIndex = CSS_ORDER.indexOf(a) < 0 ? 9999 : CSS_ORDER.indexOf(a);
-  const bIndex = CSS_ORDER.indexOf(b) < 0 ? 9999 : CSS_ORDER.indexOf(b);
+    const aIndex = CSS_ORDER.indexOf(a) < 0 ? 9999 : CSS_ORDER.indexOf(a);
+    const bIndex = CSS_ORDER.indexOf(b) < 0 ? 9999 : CSS_ORDER.indexOf(b);
     return aIndex - bIndex;
   });
   return lines.join(endLineMarker);
