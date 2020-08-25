@@ -1,12 +1,12 @@
 {
-  "name": "moka-sort-imports",
-  "displayName": "Moka Sort Imports",
+  "name": "moka-format",
+  "displayName": "Moka format",
   "description": "Sort imports automatically",
   "version": "0.1.0",
   "publisher": "ZhangKai",
   "repository": {
     "type": "git",
-    "url": "https://github.com/stekovinbranturry/moka-sort-imports"
+    "url": "https://github.com/stekovinbranturry/moka-format"
   },
   "icon": "icon.png",
   "engines": {
@@ -16,18 +16,18 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:moka-sort-imports.sortImports",
-    "onCommand:moka-sort-imports.sortCss"
+    "onCommand:moka-format.sortImports",
+    "onCommand:moka-format.sortCss"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "moka-sort-imports.sortImports",
+        "command": "moka-format.sortImports",
         "title": "Moka sort imports"
       },
       {
-        "command": "moka-sort-imports.sortCss",
+        "command": "moka-format.sortCss",
         "title": "Moka sort css"
       }
     ]

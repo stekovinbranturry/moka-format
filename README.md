@@ -1,14 +1,14 @@
-# Moka Sort Imports
+# Moka format
 
 自动 sort imports 的 VS Code 插件，Moka 前端团队内部使用
 
 ## Usage
 
-1. Search "Moka Sort Imports" in VS Code marketplace and install it
+1. Search "Moka format" in VS Code marketplace and install it
 
-2. Select all imports, press Cmd + Shift + P / Win + SHIFT + P, and then use command "Moka Sort Imports"
+2. Select all imports, press Cmd + Shift + P / Win + SHIFT + P, and then use command "Moka format"
 
-![](https://github.com/stekovinbranturry/moka-sort-imports/blob/master/demo.gif)
+![](https://github.com/stekovinbranturry/moka-format/blob/master/demo.gif)
 
 ## Release Notes
 
