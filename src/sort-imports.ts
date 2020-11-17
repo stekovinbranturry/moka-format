@@ -1,4 +1,4 @@
-import { window } from 'vscode';
+import { window, Range } from 'vscode';
 
 const endLineMarker = require('os').EOL;
 
@@ -23,12 +23,18 @@ const sortByReference = (arr: string[], reference: string[]) => {
 };
 
 const arryToStr = (arr: string[]) => (arr.length ? arr.join(endLineMarker) + endLineMarker + endLineMarker : '');
+const lastArryToStr = (arr: string[]) => (arr.length ? arr.join(endLineMarker) : '');
 
 const removeEmptyLines = (str: string) =>
   str
     .split(endLineMarker)
     .filter((line) => line)
     .join(endLineMarker);
+
+const isStyle = (str: string) => {
+  str = str.toLowerCase();
+  return str.endsWith(".styl';") || str.endsWith("css';");
+};
 
 const isPackage = (str: string) => REGS.PACKAGE.test(str) && !REGS.ABS_PATH.test(str);
 
@@ -45,7 +51,7 @@ const sortPackages = (arr: string[]) => {
     'react-router-dom',
     'mage-react-router',
   ];
-  const FOOTER = ['moka-ui', 'sugar-design', '@SDFoundation'];
+  const FOOTER = ['moka-ui', 'sugar-design', '@SDFoundation', '@cms'];
 
   let first: string[] = [];
   let second: string[] = [];
@@ -98,7 +104,7 @@ const sort = (text: string) => {
     .map((line) => (line.endsWith(';') ? line : line + ';'));
 
   lines.forEach((line) => {
-    if (line.endsWith(".styl';")) {
+    if (isStyle(line)) {
       styles.push(line);
     } else if (isPackage(line)) {
       packages.push(line);
@@ -113,7 +119,7 @@ const sort = (text: string) => {
     arryToStr(sortPackages(packages)) +
     arryToStr(sortOthers(components)) +
     arryToStr(sortOthers(utils)) +
-    arryToStr(styles)
+    lastArryToStr(styles)
   );
 };
 
@@ -122,9 +128,18 @@ export function sortSelectedImports() {
   if (!editor) {
     return;
   }
-  const { document, selection } = editor;
-  const text = document.getText(selection);
-  const sortedText = sort(text);
+  const { document } = editor;
+  const fullText = document.getText();
+  const fullRange = new Range(
+    document.positionAt(0),
+    document.positionAt(fullText.length - 1)
+  );
+  const allImports = (fullText.match(/import(((.|\n)+)from)?(.+);/g) || [])[0];
+  
+  if (allImports) {
+    const sortedText = sort(allImports);
+    const newFullText = fullText.replace(allImports, sortedText);
 
-  return editor.edit((edit) => edit.replace(selection, sortedText));
+    return editor.edit((edit) => edit.replace(fullRange, newFullText));
+  }
 }
