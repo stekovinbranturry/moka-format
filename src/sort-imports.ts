@@ -9,6 +9,7 @@ const REGS = {
   ),
   PACKAGE: /from \'([a-z]|@)(.+)\';/,
   COMPONENT: /\/[A-Z](.+)\';/,
+  ALL_IMPORTS: /import(((.|\n)+)from)?(.+);/
 };
 
 const getPath = (line: string) => (line.match(REGS.GET_PATH) || [])[1];
@@ -23,7 +24,6 @@ const sortByReference = (arr: string[], reference: string[]) => {
 };
 
 const arryToStr = (arr: string[]) => (arr.length ? arr.join(endLineMarker) + endLineMarker + endLineMarker : '');
-const lastArryToStr = (arr: string[]) => (arr.length ? arr.join(endLineMarker) : '');
 
 const removeEmptyLines = (str: string) =>
   str
@@ -119,7 +119,7 @@ const sort = (text: string) => {
     arryToStr(sortPackages(packages)) +
     arryToStr(sortOthers(components)) +
     arryToStr(sortOthers(utils)) +
-    lastArryToStr(styles)
+    arryToStr(styles)
   );
 };
 
@@ -134,10 +134,10 @@ export function sortSelectedImports() {
     document.positionAt(0),
     document.positionAt(fullText.length - 1)
   );
-  const allImports = (fullText.match(/import(((.|\n)+)from)?(.+);/g) || [])[0];
+  const allImports = (fullText.match(REGS.ALL_IMPORTS) || [])[0];
   
   if (allImports) {
-    const sortedText = sort(allImports);
+    const sortedText = sort(allImports).trim();
     const newFullText = fullText.replace(allImports, sortedText);
 
     return editor.edit((edit) => edit.replace(fullRange, newFullText));
