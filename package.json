@@ -2,7 +2,7 @@
   "name": "moka-format",
   "displayName": "Moka format",
   "description": "Moka format",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "publisher": "ZhangKai",
   "repository": {
     "type": "git",
@@ -17,7 +17,11 @@
   ],
   "activationEvents": [
     "onCommand:moka-format.sortImports",
-    "onCommand:moka-format.sortCss"
+    "onCommand:moka-format.sortCss",
+    "onLanguage:javascript",
+    "onLanguage:javascriptreact",
+    "onLanguage:typescript",
+    "onLanguage:typescriptreact"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -30,7 +34,17 @@
         "command": "moka-format.sortCss",
         "title": "Moka sort css"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Moka Sort Imports configuration",
+      "properties": {
+        "moka-format.on-save": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically sort imports on save."
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "yarn run compile",
