@@ -1,4 +1,6 @@
-import { window, Range } from 'vscode';
+import { Range, TextDocument, window } from 'vscode';
+
+import { getMaxRange } from './util';
 
 const endLineMarker = require('os').EOL;
 
@@ -81,7 +83,15 @@ const sortOthers = (arr: string[]) => {
   return sortByReference(arr, pathList);
 };
 
-const sort = (text: string) => {
+export const sort = (document: TextDocument): string => {
+  const fullText = document.getText();
+
+  const allImports = (fullText.match(REGS.ALL_IMPORTS) || [])[0];
+
+  if (!allImports) {
+    return '';
+  }
+
   /**
    * 引入的依赖，如react, redux
    */
@@ -99,7 +109,7 @@ const sort = (text: string) => {
    */
   let styles: string[] = [];
 
-  const lines = removeEmptyLines(text)
+  const lines = removeEmptyLines(allImports)
     .split(`;${endLineMarker}`)
     .map((line) => (line.endsWith(';') ? line : line + ';'));
 
@@ -115,12 +125,15 @@ const sort = (text: string) => {
     }
   });
 
-  return (
+  const sortedImports =
     arryToStr(sortPackages(packages)) +
     arryToStr(sortOthers(components)) +
     arryToStr(sortOthers(utils)) +
-    arryToStr(styles)
-  );
+    arryToStr(styles);
+  
+  const newFullText = fullText.replace(allImports, sortedImports.trim());
+  
+  return newFullText;
 };
 
 export function sortSelectedImports() {
@@ -129,17 +142,12 @@ export function sortSelectedImports() {
     return;
   }
   const { document } = editor;
-  const fullText = document.getText();
-  const fullRange = new Range(
-    document.positionAt(0),
-    document.positionAt(fullText.length - 1)
-  );
-  const allImports = (fullText.match(REGS.ALL_IMPORTS) || [])[0];
   
-  if (allImports) {
-    const sortedText = sort(allImports).trim();
-    const newFullText = fullText.replace(allImports, sortedText);
-
-    return editor.edit((edit) => edit.replace(fullRange, newFullText));
+  const newFullText = sort(document);
+  
+  if (!newFullText) {
+    return;
   }
+
+  return editor.edit((edit) => edit.replace(getMaxRange(), newFullText));
 }
