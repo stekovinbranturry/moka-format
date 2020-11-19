@@ -10,8 +10,7 @@ const REGS = {
     "('apply/)|('apply-mobile/)|('apply-web/)|('chrome-extension/)|('common/)|('dajie-api/)|('deliver_query/)|('foreground/)|('headhunter/)|('hr_mobile/)|('interview_signin/)|('lagou-sms/)|('lingui/)|('main-app/)|('oneclick/)|('reset_password/)|('server/)|('shixiseng-api/)|('sign_in/)|('source_signin/)"
   ),
   PACKAGE: /from \'([a-z]|@)(.+)\';/,
-  COMPONENT: /\/[A-Z](.+)\';/,
-  ALL_IMPORTS: /import(((.|\n)+)from)?(.+);/
+  COMPONENT: /\/[A-Z](.+)\';/
 };
 
 const getPath = (line: string) => (line.match(REGS.GET_PATH) || [])[1];
@@ -86,11 +85,22 @@ const sortOthers = (arr: string[]) => {
 export const sort = (document: TextDocument): string => {
   const fullText = document.getText();
 
-  const allImports = (fullText.match(REGS.ALL_IMPORTS) || [])[0];
+  const fullTextArr = fullText.split(endLineMarker);
 
-  if (!allImports) {
+  let lastImportLine: number = 0;
+  
+  for (let i = 0; i < fullTextArr.length; i++) {
+    const ele = fullTextArr[i];
+    if (/^\}\sfrom\s'(.+)';/.test(ele) || /import\s(.+)\sfrom\s'(.+)';/.test(ele) || /import\s'(.+)';/.test(ele)) {
+      lastImportLine = i;
+    }
+  }
+  
+  if (lastImportLine === 0) {
     return '';
   }
+
+  const allImports = fullTextArr.splice(0, lastImportLine + 1).join(endLineMarker);
 
   /**
    * 引入的依赖，如react, redux
