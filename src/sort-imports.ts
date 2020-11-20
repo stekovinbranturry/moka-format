@@ -91,7 +91,7 @@ export const sort = (document: TextDocument): string => {
   
   for (let i = 0; i < fullTextArr.length; i++) {
     const ele = fullTextArr[i];
-    if (/^\}\sfrom\s'(.+)';/.test(ele) || /import\s(.+)\sfrom\s'(.+)';/.test(ele) || /import\s'(.+)';/.test(ele)) {
+    if (/^\}\sfrom\s'(.+)';/.test(ele) || /^import\s(.+)\sfrom\s'(.+)';/.test(ele) || /^import\s'(.+)';/.test(ele)) {
       lastImportLine = i;
     }
   }
