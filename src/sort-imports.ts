@@ -1,4 +1,4 @@
-import { Range, TextDocument, window } from 'vscode';
+import { TextDocument, window } from 'vscode';
 
 import { getMaxRange } from './util';
 
@@ -21,7 +21,7 @@ const sortByReference = (arr: string[], reference: string[]) => {
     const bPath = getPath(b);
     return reference.indexOf(aPath) - reference.indexOf(bPath);
   });
-  return arr;
+  return [...new Set(arr)];
 };
 
 const arryToStr = (arr: string[]) => (arr.length ? arr.join(endLineMarker) + endLineMarker + endLineMarker : '');
@@ -139,7 +139,7 @@ export const sort = (document: TextDocument): string => {
     arryToStr(sortPackages(packages)) +
     arryToStr(sortOthers(components)) +
     arryToStr(sortOthers(utils)) +
-    arryToStr(styles);
+    arryToStr([...new Set(styles)]);
   
   const newFullText = fullText.replace(allImports, sortedImports.trim());
   
