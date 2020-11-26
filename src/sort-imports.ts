@@ -82,6 +82,46 @@ const sortOthers = (arr: string[]) => {
   return sortByReference(arr, pathList);
 };
 
+/**
+ * merge same imports, you dun wanna try to understand it
+ * @param arr 
+ */
+const mergeSameImport = (arr: string[]) => {
+  if (arr.length < 2) {
+    return arr;
+  }
+  const map = new Map();
+  arr.forEach((el) => {
+    const pack = getPath(el);
+    if (map.has(pack)) {
+      map.set(pack, [...map.get(pack), el]);
+    } else {
+      map.set(pack, [el]);
+    }
+  });
+  let result = [];
+  for (const [k, v] of map) {
+    if (v.length > 1) {
+      let a: string[] = [];
+      let b: string = '';
+      v.forEach((_el: string) => {
+        const items = (_el.match(/import ((.|\n)+) from/) || [])[1].trim();
+        const itemA = items.match(/{((.|\n)+)}/) || [];
+        let itemB = items.split(itemA[0]).find(i => i);
+        if (itemB) {
+          b = itemB.trim().split(',').find(i=>i) || '';
+        }
+        a = [...a, ...itemA[1].split(',').map(i=>i && i.trim())];
+      });
+      a = [...new Set(a)];
+      result.push(`import ${b}${b?',':''} {${a.join(', ')}} from '${k}';`);
+    } else {
+      result.push(v);
+    }
+  }
+  return result;
+};
+
 export const sort = (document: TextDocument): string => {
   const fullText = document.getText();
 
@@ -136,9 +176,9 @@ export const sort = (document: TextDocument): string => {
   });
 
   const sortedImports =
-    arryToStr(sortPackages(packages)) +
-    arryToStr(sortOthers(components)) +
-    arryToStr(sortOthers(utils)) +
+    arryToStr(mergeSameImport(sortPackages(packages))) +
+    arryToStr(mergeSameImport(sortOthers(components))) +
+    arryToStr(mergeSameImport(sortOthers(utils))) +
     arryToStr([...new Set(styles)]);
   
   const newFullText = fullText.replace(allImports, sortedImports.trim());
