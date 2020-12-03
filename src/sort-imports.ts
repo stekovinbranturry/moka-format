@@ -102,19 +102,21 @@ const mergeSameImport = (arr: string[]) => {
   let result = [];
   for (const [k, v] of map) {
     if (v.length > 1) {
+      // not default module
       let a: string[] = [];
+      // defalut module
       let b: string = '';
       v.forEach((_el: string) => {
         const items = (_el.match(/import ((.|\n)+) from/) || [])[1].trim();
         const itemA = items.match(/{((.|\n)+)}/) || [];
         let itemB = items.split(itemA[0]).find(i => i);
         if (itemB) {
-          b = itemB.trim().split(',').find(i=>i) || '';
+          b = itemB.trim().split(',').find(i => i) || '';
         }
-        a = [...a, ...itemA[1].split(',').map(i=>i && i.trim())];
+        a = [...a, ...itemA[1].split(',').map(i => i.trim())];
       });
-      a = [...new Set(a)];
-      result.push(`import ${b}${b?',':''} {${a.join(', ')}} from '${k}';`);
+      a = [...new Set(a)].filter(i => i);
+      result.push(`import ${b}${b ? ', ' : ''}{ ${a.join(', ')} } from '${k}';`);
     } else {
       result.push(v);
     }
@@ -128,14 +130,14 @@ export const sort = (document: TextDocument): string => {
   const fullTextArr = fullText.split(endLineMarker);
 
   let lastImportLine: number = 0;
-  
+
   for (let i = 0; i < fullTextArr.length; i++) {
     const ele = fullTextArr[i];
     if (/^\}\sfrom\s'(.+)';/.test(ele) || /^import\s(.+)\sfrom\s'(.+)';/.test(ele) || /^import\s'(.+)';/.test(ele)) {
       lastImportLine = i;
     }
   }
-  
+
   if (lastImportLine === 0) {
     return '';
   }
@@ -180,9 +182,9 @@ export const sort = (document: TextDocument): string => {
     arryToStr(mergeSameImport(sortOthers(components))) +
     arryToStr(mergeSameImport(sortOthers(utils))) +
     arryToStr([...new Set(styles)]);
-  
+
   const newFullText = fullText.replace(allImports, sortedImports.trim());
-  
+
   return newFullText;
 };
 
@@ -192,9 +194,9 @@ export function sortSelectedImports() {
     return;
   }
   const { document } = editor;
-  
+
   const newFullText = sort(document);
-  
+
   if (!newFullText) {
     return;
   }
