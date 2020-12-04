@@ -1,6 +1,6 @@
-[![](https://vsmarketplacebadge.apphb.com/version-short/eamodio.gitlens.svg)](https://marketplace.visualstudio.com/items?itemName=ZhangKai.moka-format)
-[![](https://vsmarketplacebadge.apphb.com/downloads-short/eamodio.gitlens.svg)](https://marketplace.visualstudio.com/items?itemName=ZhangKai.moka-format)
-[![](https://vsmarketplacebadge.apphb.com/rating-short/eamodio.gitlens.svg)](https://marketplace.visualstudio.com/items?itemName=ZhangKai.moka-format)
+[![](https://vsmarketplacebadge.apphb.com/version-short/ZhangKai.moka-format.svg)](https://marketplace.visualstudio.com/items?itemName=ZhangKai.moka-format)
+[![](https://vsmarketplacebadge.apphb.com/downloads-short/ZhangKai.moka-format.svg)](https://marketplace.visualstudio.com/items?itemName=ZhangKai.moka-format)
+[![](https://vsmarketplacebadge.apphb.com/rating-short/ZhangKai.moka-format.svg)](https://marketplace.visualstudio.com/items?itemName=ZhangKai.moka-format)
 
 # Moka format
 
