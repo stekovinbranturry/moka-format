@@ -52,7 +52,7 @@ const sortPackages = (arr: string[]) => {
     'react-router-dom',
     'mage-react-router',
   ];
-  const FOOTER = ['moka-ui', 'sugar-design', '@SDFoundation', '@cms'];
+  const FOOTER = ['moka-ui', 'sugar-design', '@SDFoundation', '@SDV', '@cms'];
 
   let first: string[] = [];
   let second: string[] = [];
