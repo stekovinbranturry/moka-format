@@ -43,6 +43,8 @@ const isComponent = (str: string) => REGS.COMPONENT.test(str);
 
 const sortPackages = (arr: string[]) => {
   const HEADER = [
+    'react-hot-loader',
+    'react-hot-loader/root',
     'react',
     'react-dom',
     'redux',
